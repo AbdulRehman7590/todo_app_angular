@@ -1,0 +1,12 @@
+<ul class="todo-list" [ngClass]="'todo-list--' + viewMode">
+  <li *ngFor="let todo of todos; trackBy: trackById">
+    <app-todo-card
+      [todo]="todo"
+      [layout]="viewMode"
+      (view)="view.emit($event)"
+      (edit)="edit.emit($event)"
+      (remove)="remove.emit($event)"
+      (toggleStatus)="toggleStatus.emit($event)"
+    ></app-todo-card>
+  </li>
+</ul>

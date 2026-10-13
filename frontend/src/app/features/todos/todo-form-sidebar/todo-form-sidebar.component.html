@@ -1,0 +1,72 @@
+<app-sidebar [heading]="isEditMode ? 'Edit todo' : 'New todo'" [isOpen]="isOpen" (closed)="closed.emit()">
+  <form id="todo-form" class="todo-form" [formGroup]="todoForm" (ngSubmit)="onSubmit()" novalidate>
+    <div class="field">
+      <label class="field__label" for="todo-title">Title <span class="field__required">*</span></label>
+      <input
+        id="todo-title"
+        class="input"
+        type="text"
+        formControlName="title"
+        placeholder="What needs to be done?"
+        [ngClass]="{ 'input--invalid': isInvalid(todoForm.controls.title) }"
+        [attr.aria-invalid]="isInvalid(todoForm.controls.title)"
+        aria-describedby="todo-title-error"
+      />
+      <div id="todo-title-error" class="field__error" *ngIf="isInvalid(todoForm.controls.title)">
+        <span *ngIf="todoForm.controls.title.hasError('required')">Title is required.</span>
+        <span *ngIf="todoForm.controls.title.hasError('blank')">Title cannot contain only spaces.</span>
+        <span *ngIf="todoForm.controls.title.hasError('minlength')">Title must be at least 3 characters.</span>
+        <span *ngIf="todoForm.controls.title.hasError('maxlength')">Title cannot exceed 100 characters.</span>
+      </div>
+    </div>
+
+    <div class="field">
+      <label class="field__label" for="todo-description">Description</label>
+      <textarea
+        id="todo-description"
+        class="input"
+        rows="4"
+        formControlName="description"
+        placeholder="Add more details (optional)"
+        [ngClass]="{ 'input--invalid': isInvalid(todoForm.controls.description) }"
+        [attr.aria-invalid]="isInvalid(todoForm.controls.description)"
+        aria-describedby="todo-description-hint"
+      ></textarea>
+      <div id="todo-description-hint" class="field__hint">
+        <span class="field__error" *ngIf="isInvalid(todoForm.controls.description)">
+          Description cannot exceed 500 characters.
+        </span>
+        <span class="field__counter">{{ todoForm.controls.description.value.length }}/500</span>
+      </div>
+    </div>
+
+    <div class="field-row">
+      <div class="field">
+        <label class="field__label" for="todo-priority">Priority <span class="field__required">*</span></label>
+        <select id="todo-priority" class="input" formControlName="priority">
+          <option *ngFor="let priority of priorities" [value]="priority">{{ priority | titlecase }}</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label class="field__label" for="todo-status">Status <span class="field__required">*</span></label>
+        <select id="todo-status" class="input" formControlName="status">
+          <option *ngFor="let status of statuses" [value]="status">{{ status | titlecase }}</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="field">
+      <label class="field__label" for="todo-due-date">Due date</label>
+      <input id="todo-due-date" class="input" type="date" formControlName="dueDate" />
+    </div>
+  </form>
+
+  <!-- The submit button sits outside <form>, so the `form` attribute links it back. -->
+  <div sidebar-footer class="button-group">
+    <button type="submit" form="todo-form" class="btn btn--primary" [disabled]="isSaving">
+      {{ isSaving ? 'Saving...' : isEditMode ? 'Save changes' : 'Create todo' }}
+    </button>
+    <button type="button" class="btn btn--secondary" [disabled]="isSaving" (click)="closed.emit()">Cancel</button>
+  </div>
+</app-sidebar>

@@ -1,0 +1,32 @@
+<article class="todo-card" [appPriorityHighlight]="todo.priority"
+  [ngClass]="{ 'todo-card--row': layout === 'list', 'todo-card--completed': todo.status === 'completed' }">
+  <button type="button" class="todo-card__check"
+    [attr.aria-label]="todo.status === 'completed' ? 'Mark as pending' : 'Mark complete'"
+    [attr.title]="todo.status === 'completed' ? 'Mark as pending' : 'Mark complete'"
+    [attr.aria-pressed]="todo.status === 'completed'" (click)="toggleStatus.emit(todo)">
+    <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true">
+      <path d="m2.5 6.5 2.5 2.5 4.5-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+        stroke-linejoin="round" />
+    </svg>
+  </button>
+
+  <div class="todo-card__body">
+    <div class="todo-card__header">
+      <button type="button" class="todo-card__title" (click)="view.emit(todo)">{{ todo.title }}</button>
+      <span class="badge" [ngClass]="'badge--' + todo.priority">{{ todo.priority | priorityLabel }}</span>
+    </div>
+
+    <p class="todo-card__description" *ngIf="todo.description">{{ todo.description }}</p>
+
+    <div class="todo-card__meta">
+      <span class="badge" [ngClass]="'badge--' + todo.status">{{ todo.status | titlecase }}</span>
+      <span *ngIf="todo.dueDate">Due {{ todo.dueDate | date: 'mediumDate' }}</span>
+      <span>Created {{ todo.createdAt | date: 'mediumDate' }}</span>
+    </div>
+  </div>
+
+  <div class="todo-card__actions">
+    <button type="button" class="btn btn--ghost btn--sm" (click)="edit.emit(todo)">Edit</button>
+    <button type="button" class="btn btn--danger-ghost btn--sm" (click)="remove.emit(todo)">Delete</button>
+  </div>
+</article>

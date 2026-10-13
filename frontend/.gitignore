@@ -1,0 +1,10 @@
+# Dependencies and build output (created inside Docker)
+/node_modules
+/dist
+/.angular
+
+# Editors and OS files
+.vscode/*
+.idea/
+.DS_Store
+Thumbs.db

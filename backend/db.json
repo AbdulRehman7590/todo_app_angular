@@ -1,0 +1,58 @@
+{
+  "todos": [
+    {
+      "id": 1,
+      "title": "Prepare Q4 sales report",
+      "description": "Collect revenue figures from the CRM and summarise the top five accounts for the leadership meeting.",
+      "priority": "high",
+      "status": "completed",
+      "dueDate": "2026-10-16",
+      "createdAt": "2026-10-05T09:15:00.000Z"
+    },
+    {
+      "id": 2,
+      "title": "Review onboarding checklist",
+      "description": "Go through the new-hire onboarding document and update outdated tool links.",
+      "priority": "medium",
+      "status": "completed",
+      "dueDate": "2026-10-08",
+      "createdAt": "2026-10-02T11:30:00.000Z"
+    },
+    {
+      "id": 3,
+      "title": "Fix login page typo",
+      "description": "The 'Forgot password' link says 'Forgor password' on the mobile layout.",
+      "priority": "low",
+      "status": "completed",
+      "dueDate": null,
+      "createdAt": "2026-10-01T14:45:00.000Z"
+    },
+    {
+      "id": 4,
+      "title": "Schedule client demo",
+      "description": "Coordinate with the Acme Corp team to book a 45-minute product demo next week.",
+      "priority": "high",
+      "status": "pending",
+      "dueDate": "2026-10-14",
+      "createdAt": "2026-10-07T08:00:00.000Z"
+    },
+    {
+      "id": 5,
+      "title": "Update API documentation",
+      "description": "Document the new contact export endpoint, including query parameters and example responses.",
+      "priority": "medium",
+      "status": "pending",
+      "dueDate": "2026-10-21",
+      "createdAt": "2026-10-09T16:20:00.000Z"
+    },
+    {
+      "id": 6,
+      "title": "Renew SSL certificate",
+      "description": "The staging certificate expires at the end of the month.",
+      "priority": "low",
+      "status": "pending",
+      "dueDate": "2026-10-28",
+      "createdAt": "2026-10-10T10:05:00.000Z"
+    }
+  ]
+}

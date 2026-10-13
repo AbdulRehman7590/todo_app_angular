@@ -1,0 +1,38 @@
+<app-sidebar heading="Todo details" [isOpen]="isOpen" (closed)="closed.emit()">
+  <ng-container *ngIf="todo">
+    <div class="details__badges">
+      <span class="badge" [ngClass]="'badge--' + todo.status">{{ todo.status | uppercase }}</span>
+      <span class="badge" [ngClass]="'badge--' + todo.priority">{{ todo.priority | priorityLabel }}</span>
+    </div>
+
+    <h3 class="details__title">{{ todo.title }}</h3>
+
+    <section class="details__section">
+      <h4 class="details__label">Description</h4>
+      <p class="details__description" [ngClass]="{ muted: !todo.description }">
+        {{ todo.description || 'No description provided.' }}
+      </p>
+    </section>
+
+    <dl class="details__grid">
+      <div>
+        <dt class="details__label">Due date</dt>
+        <dd [ngClass]="{ muted: !todo.dueDate }">
+          {{ todo.dueDate ? (todo.dueDate | date: 'fullDate') : 'No due date' }}
+        </dd>
+      </div>
+      <div>
+        <dt class="details__label">Created</dt>
+        <dd>{{ todo.createdAt | date: 'medium' }}</dd>
+      </div>
+    </dl>
+  </ng-container>
+
+  <div sidebar-footer class="button-group details__actions" *ngIf="todo">
+    <button type="button" class="btn btn--primary" (click)="edit.emit(todo)">Edit</button>
+    <button type="button" class="btn btn--secondary" (click)="toggleStatus.emit(todo)">
+      {{ todo.status === 'completed' ? 'Mark as pending' : 'Mark complete' }}
+    </button>
+    <button type="button" class="btn btn--danger-ghost" (click)="remove.emit(todo)">Delete</button>
+  </div>
+</app-sidebar>

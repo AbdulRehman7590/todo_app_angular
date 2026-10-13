@@ -1,0 +1,156 @@
+<section class="hero">
+  <div class="hero__text">
+    <h1 class="hero__title">My todos</h1>
+    <p class="hero__subtitle">Plan, track and complete your work.</p>
+    <div class="progress" *ngIf="todos.length">
+      <div
+        class="progress__track"
+        role="progressbar"
+        aria-label="Completed todos"
+        aria-valuemin="0"
+        aria-valuemax="100"
+        [attr.aria-valuenow]="completionPercent"
+      >
+        <div class="progress__bar" [style.width.%]="completionPercent"></div>
+      </div>
+      <span class="progress__label">{{ completionPercent }}% complete</span>
+    </div>
+  </div>
+  <button type="button" class="btn btn--primary" (click)="openCreateForm()">
+    <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
+      <path d="M8 3v10M3 8h10" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+    </svg>
+    Add Todo
+  </button>
+</section>
+
+<section class="stats" aria-label="Todo summary">
+  <div class="stat-card" *ngFor="let card of statCards">
+    <span class="stat-card__label">
+      <span class="stat-card__dot" [ngStyle]="{ background: card.color }"></span>
+      {{ card.label }}
+    </span>
+    <span class="stat-card__value">{{ card.value }}</span>
+    <span class="stat-card__caption">{{ card.caption }}</span>
+  </div>
+</section>
+
+<section class="toolbar" aria-label="Search and filters">
+  <div class="toolbar__search">
+    <svg class="toolbar__search-icon" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
+      <circle cx="7" cy="7" r="4.5" fill="none" stroke="currentColor" stroke-width="1.75" />
+      <path d="m10.5 10.5 3 3" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" />
+    </svg>
+    <input
+      class="input"
+      type="search"
+      placeholder="Search by title or description..."
+      aria-label="Search todos"
+      [formControl]="searchControl"
+    />
+  </div>
+
+  <div class="segmented" role="group" aria-label="Filter by status">
+    <button
+      *ngFor="let filter of statusFilters"
+      type="button"
+      class="segmented__option"
+      [ngClass]="{ 'segmented__option--active': statusFilter === filter }"
+      [attr.aria-pressed]="statusFilter === filter"
+      (click)="setStatusFilter(filter)"
+    >
+      {{ filter | titlecase }}
+    </button>
+  </div>
+
+  <select class="input toolbar__priority" aria-label="Filter by priority" [formControl]="priorityControl">
+    <option value="all">All priorities</option>
+    <option value="high">High</option>
+    <option value="medium">Medium</option>
+    <option value="low">Low</option>
+  </select>
+
+  <div class="segmented toolbar__view" role="group" aria-label="Layout">
+    <button
+      type="button"
+      class="segmented__option"
+      [ngClass]="{ 'segmented__option--active': viewMode === 'list' }"
+      [attr.aria-pressed]="viewMode === 'list'"
+      (click)="viewMode = 'list'"
+    >
+      List
+    </button>
+    <button
+      type="button"
+      class="segmented__option"
+      [ngClass]="{ 'segmented__option--active': viewMode === 'card' }"
+      [attr.aria-pressed]="viewMode === 'card'"
+      (click)="viewMode = 'card'"
+    >
+      Cards
+    </button>
+  </div>
+</section>
+
+<div class="toast-region" role="status" aria-live="polite">
+  <div *ngIf="notice" class="toast" [ngClass]="'toast--' + notice.type">
+    <span class="toast__icon" aria-hidden="true">{{ notice.type === 'success' ? '✓' : '!' }}</span>
+    {{ notice.text }}
+  </div>
+</div>
+
+<ng-container [ngSwitch]="viewState">
+  <div *ngSwitchCase="'loading'" class="skeleton-list" aria-busy="true">
+    <span class="visually-hidden">Loading todos...</span>
+    <div class="skeleton" *ngFor="let row of [1, 2, 3]"></div>
+  </div>
+
+  <div *ngSwitchCase="'error'" class="state">
+    <span class="state__icon state__icon--error" aria-hidden="true">!</span>
+    <p class="state__title">Something went wrong</p>
+    <p>{{ loadError }}</p>
+    <button type="button" class="btn btn--secondary" (click)="loadTodos()">Try again</button>
+  </div>
+
+  <div *ngSwitchCase="'empty'" class="state">
+    <span class="state__icon" aria-hidden="true">✓</span>
+    <p class="state__title">No todos yet</p>
+    <p>Create your first todo to get started.</p>
+    <button type="button" class="btn btn--primary" (click)="openCreateForm()">Add Todo</button>
+  </div>
+
+  <div *ngSwitchCase="'no-results'" class="state">
+    <span class="state__icon" aria-hidden="true">?</span>
+    <p class="state__title">No matching todos</p>
+    <p>Try a different search term or filter.</p>
+    <button type="button" class="btn btn--secondary" (click)="clearFilters()">Clear filters</button>
+  </div>
+
+  <app-todo-list
+    *ngSwitchDefault
+    [todos]="visibleTodos"
+    [viewMode]="viewMode"
+    (view)="openDetails($event)"
+    (edit)="openEditForm($event)"
+    (remove)="deleteTodo($event)"
+    (toggleStatus)="toggleStatus($event)"
+  ></app-todo-list>
+</ng-container>
+
+<!-- Details comes before the form so focus is restored correctly when switching from details to edit. -->
+<app-todo-details-sidebar
+  [isOpen]="activeSidebar === 'details'"
+  [todo]="selectedTodo$ | async"
+  (edit)="openEditForm($event)"
+  (remove)="deleteTodo($event)"
+  (toggleStatus)="toggleStatus($event)"
+  (closed)="closeSidebar()"
+></app-todo-details-sidebar>
+
+<app-todo-form-sidebar
+  [isOpen]="activeSidebar === 'form'"
+  [todo]="editingTodo"
+  [isSaving]="isSaving"
+  (save)="saveTodo($event)"
+  (closed)="closeSidebar()"
+></app-todo-form-sidebar>

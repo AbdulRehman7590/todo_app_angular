@@ -1,0 +1,295 @@
+// Global design tokens and shared UI classes (buttons, badges, form fields, segmented control).
+
+:root {
+  --color-bg: #f5f6fa;
+  --color-surface: #ffffff;
+  --color-surface-muted: #f9fafb;
+  --color-border: #e6e8ee;
+  --color-border-strong: #d0d5dd;
+  --color-text: #101828;
+  --color-text-muted: #667085;
+
+  --color-primary: #4f46e5;
+  --color-primary-hover: #4338ca;
+  --color-primary-soft: #eef2ff;
+  --color-success: #067647;
+  --color-success-soft: #dcfae6;
+  --color-warning: #b54708;
+  --color-warning-soft: #fef0c7;
+  --color-danger: #d92d20;
+  --color-danger-soft: #fee4e2;
+  --color-info: #175cd3;
+  --color-info-soft: #d1e9ff;
+
+  --radius: 8px;
+  --radius-lg: 14px;
+  --shadow-sm: 0 1px 2px rgba(16, 24, 40, 0.05);
+  --shadow-md: 0 4px 8px -2px rgba(16, 24, 40, 0.08), 0 2px 4px -2px rgba(16, 24, 40, 0.04);
+  --shadow-lg: -16px 0 40px rgba(16, 24, 40, 0.16);
+  --focus-ring: 0 0 0 4px rgba(79, 70, 229, 0.16);
+  --content-width: 1120px;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  font-size: 15px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3 {
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.muted {
+  color: var(--color-text-muted);
+}
+
+// Buttons
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.375rem;
+  height: 2.5rem;
+  padding: 0 1rem;
+  border: 1px solid transparent;
+  border-radius: var(--radius);
+  font: inherit;
+  font-size: 0.875rem;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color 150ms ease, border-color 150ms ease, box-shadow 150ms ease;
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  &--sm {
+    height: 2rem;
+    padding: 0 0.75rem;
+    font-size: 0.8125rem;
+  }
+
+  &--primary {
+    background: var(--color-primary);
+    box-shadow: 0 1px 2px rgba(79, 70, 229, 0.3);
+    color: #fff;
+
+    &:hover:not(:disabled) {
+      background: var(--color-primary-hover);
+    }
+  }
+
+  &--secondary {
+    background: var(--color-surface);
+    border-color: var(--color-border-strong);
+    box-shadow: var(--shadow-sm);
+    color: var(--color-text);
+
+    &:hover:not(:disabled) {
+      background: var(--color-surface-muted);
+    }
+  }
+
+  &--ghost {
+    background: transparent;
+    color: var(--color-text-muted);
+
+    &:hover:not(:disabled) {
+      background: var(--color-surface-muted);
+      color: var(--color-text);
+    }
+  }
+
+  &--danger-ghost {
+    background: transparent;
+    color: var(--color-danger);
+
+    &:hover:not(:disabled) {
+      background: var(--color-danger-soft);
+    }
+  }
+}
+
+.button-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+// Badges
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.125rem 0.625rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  white-space: nowrap;
+
+  &::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+  }
+
+  &--high {
+    background: var(--color-danger-soft);
+    color: var(--color-danger);
+  }
+
+  &--medium {
+    background: var(--color-warning-soft);
+    color: var(--color-warning);
+  }
+
+  &--low {
+    background: var(--color-info-soft);
+    color: var(--color-info);
+  }
+
+  &--completed {
+    background: var(--color-success-soft);
+    color: var(--color-success);
+  }
+
+  &--pending {
+    background: #f2f4f7;
+    color: #475467;
+  }
+}
+
+// Form controls
+
+.input {
+  width: 100%;
+  min-height: 2.5rem;
+  padding: 0.5rem 0.875rem;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  color: var(--color-text);
+  font: inherit;
+  font-size: 0.875rem;
+  transition: border-color 150ms ease, box-shadow 150ms ease;
+
+  &::placeholder {
+    color: #98a2b3;
+  }
+
+  &:focus {
+    border-color: var(--color-primary);
+    outline: none;
+    box-shadow: var(--focus-ring);
+  }
+
+  &--invalid,
+  &--invalid:focus {
+    border-color: var(--color-danger);
+    box-shadow: 0 0 0 4px rgba(217, 45, 32, 0.12);
+  }
+}
+
+select.input {
+  appearance: none;
+  padding-right: 2.25rem;
+  background: var(--color-surface)
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='%23667085' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m4 6 4 4 4-4'/%3E%3C/svg%3E")
+    no-repeat right 0.75rem center;
+  cursor: pointer;
+}
+
+textarea.input {
+  resize: vertical;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+}
+
+.field__label {
+  color: #344054;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.field__required {
+  color: var(--color-danger);
+}
+
+.field__error {
+  display: flex;
+  flex-direction: column;
+  color: var(--color-danger);
+  font-size: 0.8125rem;
+}
+
+// Segmented control (status filter and list/card switch)
+
+.segmented {
+  display: inline-flex;
+  padding: 0.25rem;
+  background: #f2f4f7;
+  border-radius: var(--radius);
+}
+
+.segmented__option {
+  height: 2rem;
+  padding: 0 0.875rem;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--color-text-muted);
+  font: inherit;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 150ms ease, color 150ms ease;
+
+  &:hover {
+    color: var(--color-text);
+  }
+
+  &--active {
+    background: var(--color-surface);
+    box-shadow: var(--shadow-sm), 0 0 0 1px var(--color-border);
+    color: var(--color-text);
+  }
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}

@@ -1,0 +1,25 @@
+<div class="sidebar" [ngClass]="{ 'sidebar--open': isOpen }">
+  <div class="sidebar__backdrop" (click)="closed.emit()"></div>
+
+  <aside
+    #panel
+    class="sidebar__panel"
+    role="dialog"
+    aria-modal="true"
+    tabindex="-1"
+    [attr.aria-labelledby]="headingId"
+  >
+    <header class="sidebar__header">
+      <h2 class="sidebar__heading" [id]="headingId">{{ heading }}</h2>
+      <button type="button" class="sidebar__close" aria-label="Close panel" (click)="closed.emit()">
+        &times;
+      </button>
+    </header>
+
+    <div class="sidebar__body">
+      <ng-content></ng-content>
+    </div>
+
+    <footer class="sidebar__footer"><ng-content select="[sidebar-footer]"></ng-content></footer>
+  </aside>
+</div>
