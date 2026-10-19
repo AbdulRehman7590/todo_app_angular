@@ -20,7 +20,9 @@
 
     <div class="todo-card__meta">
       <span class="badge" [ngClass]="'badge--' + todo.status">{{ todo.status | titlecase }}</span>
-      <span *ngIf="todo.dueDate">Due {{ todo.dueDate | date: 'mediumDate' }}</span>
+      <span *ngIf="todo.dueDate" class="todo-card__due" [class.todo-card__due--overdue]="isOverdue">
+        {{ isOverdue ? 'Overdue ·' : 'Due' }} {{ todo.dueDate | date: 'mediumDate' }}
+      </span>
       <span>Created {{ todo.createdAt | date: 'mediumDate' }}</span>
     </div>
   </div>

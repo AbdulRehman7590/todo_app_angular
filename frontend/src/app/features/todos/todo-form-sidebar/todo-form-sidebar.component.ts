@@ -1,9 +1,30 @@
-import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
-import { AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  Output,
+  SimpleChanges,
+} from '@angular/core';
+import {
+  AbstractControl,
+  FormControl,
+  FormGroup,
+  ValidationErrors,
+  ValidatorFn,
+  Validators,
+} from '@angular/forms';
 
-import { CreateTodoRequest, Todo, TodoPriority, TodoStatus } from '../../../core/models/todo.model';
+import {
+  CreateTodoRequest,
+  Todo,
+  TodoPriority,
+  TodoStatus,
+} from '../../../core/models/todo.model';
 
-function notBlankValidator(control: AbstractControl<string>): ValidationErrors | null {
+function notBlankValidator(
+  control: AbstractControl<string>,
+): ValidationErrors | null {
   const value = control.value;
   return value.length > 0 && value.trim().length === 0 ? { blank: true } : null;
 }
@@ -36,7 +57,12 @@ export class TodoFormSidebarComponent implements OnChanges {
   readonly todoForm = new FormGroup({
     title: new FormControl('', {
       nonNullable: true,
-      validators: [Validators.required, notBlankValidator, trimmedMinLengthValidator(3), Validators.maxLength(100)],
+      validators: [
+        Validators.required,
+        notBlankValidator,
+        trimmedMinLengthValidator(3),
+        Validators.maxLength(100),
+      ],
     }),
     description: new FormControl('', {
       nonNullable: true,
@@ -73,7 +99,8 @@ export class TodoFormSidebarComponent implements OnChanges {
       return;
     }
 
-    const { title, description, priority, status, dueDate } = this.todoForm.getRawValue();
+    const { title, description, priority, status, dueDate } =
+      this.todoForm.getRawValue();
     this.save.emit({
       title: title.trim(),
       description: description.trim(),

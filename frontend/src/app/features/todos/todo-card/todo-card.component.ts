@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 import { Todo, TodoViewMode } from '../../../core/models/todo.model';
+import { isTodoOverdue } from '../../../core/utils/todo-utils';
 
 @Component({
   selector: 'app-todo-card',
@@ -15,4 +16,8 @@ export class TodoCardComponent {
   @Output() edit = new EventEmitter<Todo>();
   @Output() remove = new EventEmitter<Todo>();
   @Output() toggleStatus = new EventEmitter<Todo>();
+
+  get isOverdue(): boolean {
+    return isTodoOverdue(this.todo);
+  }
 }

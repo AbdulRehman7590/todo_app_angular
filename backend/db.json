@@ -31,7 +31,7 @@
       "id": 4,
       "title": "Schedule client demo",
       "description": "Coordinate with the Acme Corp team to book a 45-minute product demo next week.",
-      "priority": "high",
+      "priority": "medium",
       "status": "pending",
       "dueDate": "2026-10-14",
       "createdAt": "2026-10-07T08:00:00.000Z"

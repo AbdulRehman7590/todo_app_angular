@@ -3,14 +3,8 @@
     <h1 class="hero__title">My todos</h1>
     <p class="hero__subtitle">Plan, track and complete your work.</p>
     <div class="progress" *ngIf="todos.length">
-      <div
-        class="progress__track"
-        role="progressbar"
-        aria-label="Completed todos"
-        aria-valuemin="0"
-        aria-valuemax="100"
-        [attr.aria-valuenow]="completionPercent"
-      >
+      <div class="progress__track" role="progressbar" aria-label="Completed todos" aria-valuemin="0" aria-valuemax="100"
+        [attr.aria-valuenow]="completionPercent">
         <div class="progress__bar" [style.width.%]="completionPercent"></div>
       </div>
       <span class="progress__label">{{ completionPercent }}% complete</span>
@@ -41,24 +35,14 @@
       <circle cx="7" cy="7" r="4.5" fill="none" stroke="currentColor" stroke-width="1.75" />
       <path d="m10.5 10.5 3 3" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" />
     </svg>
-    <input
-      class="input"
-      type="search"
-      placeholder="Search by title or description..."
-      aria-label="Search todos"
-      [formControl]="searchControl"
-    />
+    <input class="input" type="search" placeholder="Search by title or description..." aria-label="Search todos"
+      [formControl]="searchControl" />
   </div>
 
   <div class="segmented" role="group" aria-label="Filter by status">
-    <button
-      *ngFor="let filter of statusFilters"
-      type="button"
-      class="segmented__option"
-      [ngClass]="{ 'segmented__option--active': statusFilter === filter }"
-      [attr.aria-pressed]="statusFilter === filter"
-      (click)="setStatusFilter(filter)"
-    >
+    <button *ngFor="let filter of statusFilters" type="button" class="segmented__option"
+      [ngClass]="{ 'segmented__option--active': statusFilter === filter }" [attr.aria-pressed]="statusFilter === filter"
+      (click)="setStatusFilter(filter)">
       {{ filter | titlecase }}
     </button>
   </div>
@@ -70,26 +54,33 @@
     <option value="low">Low</option>
   </select>
 
+  <select class="input toolbar__date" aria-label="Filter by due date" [formControl]="dueDateControl">
+    <option value="all">Any due date</option>
+    <option value="today">Due today</option>
+    <option value="next7Days">Next 7 days</option>
+    <option value="overdue">Overdue</option>
+    <option value="noDate">No due date</option>
+  </select>
+
+  <select class="input toolbar__sort" aria-label="Sort tasks" [formControl]="sortControl">
+    <option value="newest">Recently added</option>
+    <option value="dueDate">Due date</option>
+    <option value="priority">Priority</option>
+  </select>
+
   <div class="segmented toolbar__view" role="group" aria-label="Layout">
-    <button
-      type="button"
-      class="segmented__option"
-      [ngClass]="{ 'segmented__option--active': viewMode === 'list' }"
-      [attr.aria-pressed]="viewMode === 'list'"
-      (click)="viewMode = 'list'"
-    >
+    <button type="button" class="segmented__option" [ngClass]="{ 'segmented__option--active': viewMode === 'list' }"
+      [attr.aria-pressed]="viewMode === 'list'" (click)="viewMode = 'list'">
       List
     </button>
-    <button
-      type="button"
-      class="segmented__option"
-      [ngClass]="{ 'segmented__option--active': viewMode === 'card' }"
-      [attr.aria-pressed]="viewMode === 'card'"
-      (click)="viewMode = 'card'"
-    >
+    <button type="button" class="segmented__option" [ngClass]="{ 'segmented__option--active': viewMode === 'card' }"
+      [attr.aria-pressed]="viewMode === 'card'" (click)="viewMode = 'card'">
       Cards
     </button>
   </div>
+
+  <button *ngIf="hasActiveFilters && viewState !== 'no-results'" type="button" class="btn btn--ghost btn--sm toolbar__clear"
+    (click)="clearFilters()">Clear filters</button>
 </section>
 
 <div class="toast-region" role="status" aria-live="polite">
@@ -126,31 +117,14 @@
     <button type="button" class="btn btn--secondary" (click)="clearFilters()">Clear filters</button>
   </div>
 
-  <app-todo-list
-    *ngSwitchDefault
-    [todos]="visibleTodos"
-    [viewMode]="viewMode"
-    (view)="openDetails($event)"
-    (edit)="openEditForm($event)"
-    (remove)="deleteTodo($event)"
-    (toggleStatus)="toggleStatus($event)"
-  ></app-todo-list>
+  <app-todo-list *ngSwitchDefault [todos]="visibleTodos" [viewMode]="viewMode" (view)="openDetails($event)"
+    (edit)="openEditForm($event)" (remove)="deleteTodo($event)" (toggleStatus)="toggleStatus($event)"></app-todo-list>
 </ng-container>
 
 <!-- Details comes before the form so focus is restored correctly when switching from details to edit. -->
-<app-todo-details-sidebar
-  [isOpen]="activeSidebar === 'details'"
-  [todo]="selectedTodo$ | async"
-  (edit)="openEditForm($event)"
-  (remove)="deleteTodo($event)"
-  (toggleStatus)="toggleStatus($event)"
-  (closed)="closeSidebar()"
-></app-todo-details-sidebar>
+<app-todo-details-sidebar [isOpen]="activeSidebar === 'details'" [todo]="selectedTodo$ | async"
+  (edit)="openEditForm($event)" (remove)="deleteTodo($event)" (toggleStatus)="toggleStatus($event)"
+  (closed)="closeSidebar()"></app-todo-details-sidebar>
 
-<app-todo-form-sidebar
-  [isOpen]="activeSidebar === 'form'"
-  [todo]="editingTodo"
-  [isSaving]="isSaving"
-  (save)="saveTodo($event)"
-  (closed)="closeSidebar()"
-></app-todo-form-sidebar>
+<app-todo-form-sidebar [isOpen]="activeSidebar === 'form'" [todo]="editingTodo" [isSaving]="isSaving"
+  (save)="saveTodo($event)" (closed)="closeSidebar()"></app-todo-form-sidebar>

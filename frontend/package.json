@@ -4,7 +4,8 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve --host 0.0.0.0 --poll 2000",
-    "build": "ng build"
+    "build": "ng build",
+    "test": "tsc -p tsconfig.test.json && node --test test/todo-utils.test.cjs"
   },
   "private": true,
   "dependencies": {

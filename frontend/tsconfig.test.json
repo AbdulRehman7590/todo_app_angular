@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "CommonJS",
+    "moduleResolution": "node",
+    "rootDir": "src/app/core",
+    "outDir": ".test-dist",
+    "strict": true,
+    "types": []
+  },
+  "files": ["src/app/core/utils/todo-utils.ts"]
+}

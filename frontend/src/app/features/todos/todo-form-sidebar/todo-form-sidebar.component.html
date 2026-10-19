@@ -2,16 +2,9 @@
   <form id="todo-form" class="todo-form" [formGroup]="todoForm" (ngSubmit)="onSubmit()" novalidate>
     <div class="field">
       <label class="field__label" for="todo-title">Title <span class="field__required">*</span></label>
-      <input
-        id="todo-title"
-        class="input"
-        type="text"
-        formControlName="title"
-        placeholder="What needs to be done?"
+      <input id="todo-title" class="input" type="text" formControlName="title" placeholder="What needs to be done?"
         [ngClass]="{ 'input--invalid': isInvalid(todoForm.controls.title) }"
-        [attr.aria-invalid]="isInvalid(todoForm.controls.title)"
-        aria-describedby="todo-title-error"
-      />
+        [attr.aria-invalid]="isInvalid(todoForm.controls.title)" aria-describedby="todo-title-error" />
       <div id="todo-title-error" class="field__error" *ngIf="isInvalid(todoForm.controls.title)">
         <span *ngIf="todoForm.controls.title.hasError('required')">Title is required.</span>
         <span *ngIf="todoForm.controls.title.hasError('blank')">Title cannot contain only spaces.</span>
@@ -22,16 +15,11 @@
 
     <div class="field">
       <label class="field__label" for="todo-description">Description</label>
-      <textarea
-        id="todo-description"
-        class="input"
-        rows="4"
-        formControlName="description"
+      <textarea id="todo-description" class="input" rows="4" formControlName="description"
         placeholder="Add more details (optional)"
         [ngClass]="{ 'input--invalid': isInvalid(todoForm.controls.description) }"
         [attr.aria-invalid]="isInvalid(todoForm.controls.description)"
-        aria-describedby="todo-description-hint"
-      ></textarea>
+        aria-describedby="todo-description-hint"></textarea>
       <div id="todo-description-hint" class="field__hint">
         <span class="field__error" *ngIf="isInvalid(todoForm.controls.description)">
           Description cannot exceed 500 characters.

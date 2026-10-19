@@ -24,6 +24,11 @@ import {
   TodoViewMode,
 } from '../../../core/models/todo.model';
 import { TodoService } from '../../../core/services/todo.service';
+import {
+  filterAndSortTodos,
+  TodoDateFilter,
+  TodoSortOption,
+} from '../../../core/utils/todo-utils';
 
 type StatusFilter = 'all' | TodoStatus;
 type PriorityFilter = 'all' | TodoPriority;
@@ -56,6 +61,12 @@ export class TodoPageComponent {
 
   readonly searchControl = new FormControl('', { nonNullable: true });
   readonly priorityControl = new FormControl<PriorityFilter>('all', {
+    nonNullable: true,
+  });
+  readonly sortControl = new FormControl<TodoSortOption>('newest', {
+    nonNullable: true,
+  });
+  readonly dueDateControl = new FormControl<TodoDateFilter>('all', {
     nonNullable: true,
   });
   readonly statusFilters: StatusFilter[] = ['all', 'pending', 'completed'];
@@ -119,6 +130,14 @@ export class TodoPageComponent {
       .pipe(takeUntilDestroyed())
       .subscribe(() => this.applyFilters());
 
+    this.sortControl.valueChanges
+      .pipe(takeUntilDestroyed())
+      .subscribe(() => this.applyFilters());
+
+    this.dueDateControl.valueChanges
+      .pipe(takeUntilDestroyed())
+      .subscribe(() => this.applyFilters());
+
     // Shows the selected todo immediately, then swaps in the latest copy from the server.
     // Subscribed in the template via the async pipe.
     this.selectedTodo$ = this.todoSelection$.pipe(
@@ -152,9 +171,21 @@ export class TodoPageComponent {
   }
 
   clearFilters(): void {
-    this.searchControl.setValue('');
-    this.priorityControl.setValue('all');
-    this.setStatusFilter('all');
+    this.searchTerm = '';
+    this.searchControl.setValue('', { emitEvent: false });
+    this.priorityControl.setValue('all', { emitEvent: false });
+    this.dueDateControl.setValue('all', { emitEvent: false });
+    this.statusFilter = 'all';
+    this.applyFilters();
+  }
+
+  get hasActiveFilters(): boolean {
+    return (
+      this.searchControl.value.trim().length > 0 ||
+      this.priorityControl.value !== 'all' ||
+      this.dueDateControl.value !== 'all' ||
+      this.statusFilter !== 'all'
+    );
   }
 
   openCreateForm(): void {
@@ -238,18 +269,12 @@ export class TodoPageComponent {
   }
 
   private applyFilters(): void {
-    const priority = this.priorityControl.value;
-
-    this.visibleTodos = this.todos.filter((todo) => {
-      const matchesStatus =
-        this.statusFilter === 'all' || todo.status === this.statusFilter;
-      const matchesPriority = priority === 'all' || todo.priority === priority;
-      const matchesSearch =
-        !this.searchTerm ||
-        todo.title.toLowerCase().includes(this.searchTerm) ||
-        todo.description.toLowerCase().includes(this.searchTerm);
-
-      return matchesStatus && matchesPriority && matchesSearch;
+    this.visibleTodos = filterAndSortTodos(this.todos, {
+      search: this.searchTerm,
+      status: this.statusFilter,
+      priority: this.priorityControl.value,
+      dueDate: this.dueDateControl.value,
+      sort: this.sortControl.value,
     });
   }
 

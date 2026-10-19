@@ -100,6 +100,11 @@
   font-size: 0.8125rem;
 }
 
+.todo-card__due--overdue {
+  color: var(--color-danger);
+  font-weight: 600;
+}
+
 .todo-card__actions {
   display: flex;
   grid-column: 1 / -1;
